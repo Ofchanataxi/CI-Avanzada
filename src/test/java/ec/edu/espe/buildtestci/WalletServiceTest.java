@@ -97,4 +97,18 @@ public class WalletServiceTest {
         assertEquals(600.0, saved.getBalance());
     }
 
+    @Test
+    void withdraw_insufficientFunds_ShouldThrow_andNotSave() {
+        //Arrange
+        Wallet wallet = new Wallet("oscar@espe.edu.ec", 300.0);
+        String walletId = wallet.getId();
+
+        when(walletRepository.findById(walletId)).thenReturn(Optional.of(wallet));
+
+        //Act + Assert
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> walletService.withdraw(walletId, 400.0));
+        assertEquals("Insufficient funds", exception.getMessage());
+        verify(walletRepository, never()).save(any());
+
+    }
 }
