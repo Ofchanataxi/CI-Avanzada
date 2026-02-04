@@ -111,4 +111,23 @@ public class WalletServiceTest {
         verify(walletRepository, never()).save(any());
 
     }
+
+    @Test
+    void withdraw_validAmount_shouldUpdateBalance_andSave() {
+        // Arrange: Preparamos una cuenta con saldo suficiente (500.0)
+        Wallet wallet = new Wallet("ofchanataxi@espe.edu.ec", 500.0);
+        String walletId = wallet.getId();
+        double withdrawAmount = 200.0;
+
+        when(walletRepository.findById(walletId)).thenReturn(Optional.of(wallet));
+        // Simulamos que el repositorio guarda correctamente
+        when(walletRepository.save(Mockito.any(Wallet.class))).thenAnswer(i -> i.getArgument(0));
+
+        // Act: Ejecutamos el retiro
+        double currentBalance = walletService.withdraw(walletId, withdrawAmount);
+
+        // Assert: Verificamos que el saldo bajó a 300 y que se llamó a guardar
+        assertEquals(300.0, currentBalance); // 500 - 200 = 300
+        verify(walletRepository).save(wallet);
+    }
 }
