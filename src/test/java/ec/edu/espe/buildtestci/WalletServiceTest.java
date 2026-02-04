@@ -31,6 +31,7 @@ public class WalletServiceTest {
     @Test
     void createWallet_validData_shouldSaveAndReturnResponse() {
         // Arrange
+
         String ownerEmail = "ofchanataxi@espe.edu.ec";
         double initial = 100.0;
 
