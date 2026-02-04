@@ -4,6 +4,8 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build-test:
@@ -18,8 +20,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Dar permisos a Gradle Wrapper
+        run: chmod +x gradlew
+
       - name: Ejecutar pruebas
         run: ./gradlew test
 
-      - name: Compilar el proyecto
+      - name: Construir
         run: ./gradlew build
